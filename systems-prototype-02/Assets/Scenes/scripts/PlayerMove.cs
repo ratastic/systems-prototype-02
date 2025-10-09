@@ -24,6 +24,10 @@ public class PlayerMove : MonoBehaviour
 
     public GameObject sugar;
     public GameObject replay;
+
+    public AudioSource crunch;
+    public bool isAlive = true;
+    public GameObject youDied;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -32,43 +36,48 @@ public class PlayerMove : MonoBehaviour
 
         sugar.SetActive(true);
         replay.SetActive(false);
+        youDied.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (isAlive == true)
         {
-            if (isCementing == true)
-            {
-                rb.linearVelocity = new Vector2(moveSpeed, moveSpeed);
-                isDrown = true;
-                if (isDrown == true)
+            if (Input.GetKeyDown(KeyCode.Space))
+            {   
+                if (isCementing == true)
                 {
-                    sr.sprite = drown2;
-                }
-                else
-                {
-                    sr.sprite = drown1;
-                }
+                    rb.linearVelocity = new Vector2(moveSpeed, moveSpeed);
+                    isDrown = true;
+                    if (isDrown == true)
+                    {
+                        sr.sprite = drown2;
+                    }
+                    else
+                    {
+                        sr.sprite = drown1;
+                    }
 
-                isDrown = !isDrown;
-            } 
-            else if (isPlatformed == true)
-            {
-                rb.linearVelocity = new Vector2(moveSpeed, 0);
-
-                if (isWalk)
+                    isDrown = !isDrown;
+                } 
+                else if (isPlatformed == true)
                 {
-                    sr.sprite = walk2;
-                }
-                else
-                {
-                    sr.sprite = walk1;
-                }
+                    rb.linearVelocity = new Vector2(moveSpeed, 0);
 
-                isWalk = !isWalk;
+                    if (isWalk)
+                    {
+                        sr.sprite = walk2;
+                    }
+                    else
+                    {
+                        sr.sprite = walk1;
+                    }
+
+                    isWalk = !isWalk;
+                }
             }
+
         }
     }
 
@@ -84,6 +93,14 @@ public class PlayerMove : MonoBehaviour
         {
             sugar.SetActive(false);
             replay.SetActive(true);
+            crunch.Play();
+        }
+
+        if (col.gameObject.CompareTag("floor"))
+        {
+            isAlive = false;
+            replay.SetActive(true);
+            youDied.SetActive(true);
         }
     }
 

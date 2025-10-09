@@ -147,7 +147,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bucket-top-view-full-length-isolate-on-transparency-background-png_0: -1639099335316898060
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
