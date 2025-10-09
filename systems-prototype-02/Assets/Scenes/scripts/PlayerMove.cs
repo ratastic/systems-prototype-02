@@ -1,18 +1,37 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerMove : MonoBehaviour
 {
+    private SpriteRenderer sr;
     private Rigidbody2D rb;
     public int moveSpeed;
 
     public bool isCementing = false;
     public bool isPlatformed = false;
+
+    public Sprite walk1;
+    public Sprite walk2;
+    private bool isWalk = true;
+
+    public Sprite drown1;
+    public Sprite drown2;
+    private bool isDrown = false;
+
+    public GameObject sugar;
+    public GameObject replay;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
+
+        sugar.SetActive(true);
+        replay.SetActive(false);
     }
 
     // Update is called once per frame
@@ -23,10 +42,32 @@ public class PlayerMove : MonoBehaviour
             if (isCementing == true)
             {
                 rb.linearVelocity = new Vector2(moveSpeed, moveSpeed);
+                isDrown = true;
+                if (isDrown == true)
+                {
+                    sr.sprite = drown2;
+                }
+                else
+                {
+                    sr.sprite = drown1;
+                }
+
+                isDrown = !isDrown;
             } 
             else if (isPlatformed == true)
             {
                 rb.linearVelocity = new Vector2(moveSpeed, 0);
+
+                if (isWalk)
+                {
+                    sr.sprite = walk2;
+                }
+                else
+                {
+                    sr.sprite = walk1;
+                }
+
+                isWalk = !isWalk;
             }
         }
     }
@@ -37,6 +78,12 @@ public class PlayerMove : MonoBehaviour
         {
             isPlatformed = true;
             Debug.Log ("touching platform");
+        }
+
+        if (col.gameObject.CompareTag("sugar"))
+        {
+            sugar.SetActive(false);
+            replay.SetActive(true);
         }
     }
 
@@ -65,6 +112,11 @@ public class PlayerMove : MonoBehaviour
             isCementing = false;
             Debug.Log ("not touching cement");
         }
+    }
+
+    public void ReplayScene()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 
 }
